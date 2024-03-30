@@ -1,12 +1,10 @@
 package com.example.dao.SensorTypes
 
-import com.example.models.Sensor
-import com.example.models.SensorType
-import javax.swing.text.StyledEditorKit.BoldAction
+import com.example.models.SensorMeasurement
 
 interface TypeDaoFacade {
 
-    suspend fun findByModel(model:Int): List<SensorType>?
-    suspend fun createSensorType(sensorType: SensorType):SensorType?
-    suspend fun deleteSensorType(model: Int): Boolean
+    suspend fun findById(sensorId:Int): List<SensorMeasurement>?
+    suspend fun createSensorMeasurement(sensorMeasurement: SensorMeasurement):SensorMeasurement?
+    suspend fun deleteSensorMeasurement(sensorId: Int): Boolean
 }

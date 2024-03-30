@@ -9,10 +9,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.measurementRouting(measurementService: MeasurementsDaoImpl){
-    get("/measurements/{station?}"){
-        val station = call.parameters["station"]?.toInt()
-        if (station != null){
-            val measurementTypeResult = measurementService.findByStation(station = station)
+    get("/measurements/{inv_numb?}"){
+        val inv_numb = call.parameters["inv_numb"]?.toInt()
+        if (inv_numb != null){
+            val measurementTypeResult = measurementService.findByInvNumb(sensor_inventory_number = inv_numb)
             call.respond(measurementTypeResult!!)
         } else {
             call.respond(HttpStatusCode.BadRequest, "Invalid model parameter")
@@ -25,9 +25,9 @@ fun Route.measurementRouting(measurementService: MeasurementsDaoImpl){
 
         call.respond(insertResult!!)
     }
-    delete("/measurements/{station?}"){
-        val stationId = call.parameters["station"]?.toInt()
-        val measurementIsDelete = measurementService.deleteMeasurement(stationId!!)
+    delete("/measurements/{inv_numb?}"){
+        val sensor_inv_numb = call.parameters["inv_numb"]?.toInt()
+        val measurementIsDelete = measurementService.deleteMeasurement(sensor_inv_numb!!)
         if (measurementIsDelete) call.respond(HttpStatusCode.OK)
         else call.respond(HttpStatusCode.NotFound)
     }

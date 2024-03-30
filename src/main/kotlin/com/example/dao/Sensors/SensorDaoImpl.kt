@@ -3,28 +3,31 @@ package com.example.dao.Sensors
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.models.Sensor
 import com.example.models.Sensors
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 
 class SensorDaoImpl: SensorDaoFacade {
-    private fun resultRowToSensor(row:ResultRow) = Sensor(sensor_model =row[Sensors.sensor_model],sensor_type = row[Sensors.sensor_type])
+    private fun resultRowToSensor(row:ResultRow) = Sensor(sensor_id =row[Sensors.sensor_id], sensor_name = row[Sensors.sensor_name])
 
     override suspend fun createSensor(sensor: Sensor): Sensor?=dbQuery {
         val insertStatement = Sensors.insert {
-            it[Sensors.sensor_type]=sensor.sensor_type
-            it[Sensors.sensor_model]=sensor.sensor_model
+            it[Sensors.sensor_id]=sensor.sensor_id
+            it[Sensors.sensor_name]=sensor.sensor_name
 
         }
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToSensor)
     }
 
-    override suspend fun findByModel(model: String): Sensor?=dbQuery{
-        Sensors.select {Sensors.sensor_type eq model}.map(::resultRowToSensor).singleOrNull()
+    override suspend fun findById(sensorId: Int): Sensor?=dbQuery{
+        Sensors.select {Sensors.sensor_id eq sensorId}.map(::resultRowToSensor).singleOrNull()
 
     }
 
     override suspend fun deleteSensor(sensorId: Int): Boolean = dbQuery{
-        Sensors.deleteWhere { Sensors.sensor_model eq sensorId } > 0
+        Sensors.deleteWhere { Sensors.sensor_id eq sensorId } > 0
     }
 
 

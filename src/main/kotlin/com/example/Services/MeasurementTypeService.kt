@@ -3,8 +3,6 @@ package com.example.Services
 import com.example.dao.MeasurementTypes.MeasurementTypeDaoFacade
 import com.example.dao.MeasurementTypes.measurementDao
 import com.example.models.Measurement_type
-import com.example.models.Measurement_types
-import com.example.models.SensorType
 
 class MeasurementTypeService(private val MeasurementTypeRepository:MeasurementTypeDaoFacade) {
     suspend fun findByTypeId(type_id: Int): Measurement_type? {

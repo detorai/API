@@ -10,7 +10,7 @@ fun Route.meteostationRouting(meteostationService: MeteostationService){
     get("/meteostation/{station_id?}"){
         val station_id = call.parameters["station_id"]?.toInt()
         if (station_id != null){
-            val meteostationResult = meteostationService.findByStation()
+            val meteostationResult = meteostationService.findByStation(station_id)
             call.respond(meteostationResult!!)
         } else {
             call.respond(HttpStatusCode.BadRequest, "Invalid model parameter")

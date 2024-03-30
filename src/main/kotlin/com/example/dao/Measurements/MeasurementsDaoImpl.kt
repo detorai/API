@@ -7,29 +7,33 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class MeasurementsDaoImpl:MeasurementsDaoFacade {
-    private fun resultRowToMeasurements(row: ResultRow) = Measurement(station = row[Measurements.station], measurement_type = row[Measurements.measurement_type], measurement_value =  row[Measurements.measurement_value],  sensor_model = row[Measurements.sensor_model], measurement_time = row[Measurements.measurement_time].toString())
-    override suspend fun findByStation(station: Int): List<Measurement> =dbQuery {
-        Measurements.select{Measurements.station eq station}.map(::resultRowToMeasurements)
+    private fun resultRowToMeasurements(row: ResultRow) = Measurement(
+        measurement_value =  row[Measurements.measurement_value],
+        measurement_type = row[Measurements.measurement_type],
+        measurement_ts= row[Measurements.measurement_time].toString(),
+        sensor_inventory_number = row[Measurements.sensor_inventory_number]
+    )
+    override suspend fun findByInvNumb(sensor_inventory_number: Int): List<Measurement>? =dbQuery {
+        Measurements.selectAll().where { Measurements.sensor_inventory_number eq sensor_inventory_number }.map { resultRowToMeasurements(it) }
     }
     override suspend fun createMeasurement(measurement: Measurement): Measurement? = dbQuery {
         val insertMeasurement = Measurements.insert {
-            it[Measurements.station]=measurement.station
-            it[Measurements.measurement_type]=measurement.measurement_type
             it[Measurements.measurement_value]=measurement.measurement_value
-            it[Measurements.sensor_model]=measurement.sensor_model
-            it[Measurements.measurement_time]= LocalDateTime.parse(measurement.measurement_time, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
+            it[Measurements.measurement_type]=measurement.measurement_type
+            it[Measurements.measurement_time]= LocalDateTime.parse(measurement.measurement_ts, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant()
+            it[Measurements.sensor_inventory_number]=measurement.sensor_inventory_number
         }
         insertMeasurement.resultedValues?.singleOrNull()?.let (::resultRowToMeasurements)
     }
 
     override suspend fun deleteMeasurement(station: Int): Boolean = dbQuery {
-        Measurements.deleteWhere { Measurements.station eq station } > 0
+        Measurements.deleteWhere { Measurements.sensor_inventory_number eq station } > 0
     }
 
 

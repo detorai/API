@@ -1,21 +1,10 @@
 package com.example.models
 
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
-import org.jetbrains.exposed.sql.IColumnType
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.json
 import org.postgresql.geometric.PGpoint
-import org.postgresql.util.PGobject
-import kotlin.reflect.KProperty
 
 
 @Serializable
@@ -24,18 +13,19 @@ data class Point(val latitude:Double, val longitude:Double)
 @Serializable
 data class Meteostation(
     val station_id:Int,
-    val station_coord:String,
-    val station_z:String,
-    val station_address:String,
-    val station_name:String
-
+    val station_name:String,
+    val longitude:String,
+    val latitude:String,
+    val station_hight_above_sea:Int,
+    val station_county:String
 )
 object Meteostations: Table(){
     val station_id = integer("id")
-    val station_coord = pgpoint("station_coord")
-    val station_z=varchar("station_z", length = 255)
-    val station_address=varchar("station_address", length = 255)
-    val station_name=varchar("station_name", length = 255)
+    val station_name=varchar("station_name", length = 50)
+    val longitude = pgpoint("longitude")
+    val latitude = pgpoint("latitude")
+    val station_hight_above_sea=integer("station_hight_above_sea")
+    val station_county=varchar("station_address", length = 50)
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(station_id)
 

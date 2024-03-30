@@ -1,6 +1,5 @@
 package com.example.dao
 
-import com.example.models.Sensor
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -8,7 +7,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 object DatabaseFactory {
     fun init(){
         val driverClassName = "org.postgresql.Driver"
-        val jdbcURL = "jdbc:postgresql://5.35.94.60:5432/dsp?user=postgres&password=123"
+        val jdbcURL = "jdbc:postgresql://193.176.78.35:5433/user109?user=user109&password=ihAY"
         val database = Database.connect(jdbcURL, driverClassName)
 
 }
