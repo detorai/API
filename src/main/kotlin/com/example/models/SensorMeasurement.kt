@@ -9,8 +9,8 @@ data class SensorMeasurement(
     val type_id:Int,
     val measurement_formula: String
 )
-object SensorMeasurements: Table(){
-    val sensor_id = integer("sensor_model")
+object Sensors_Measurements: Table(){
+    val sensor_id = integer("sensor_id")
     val type_id = integer("type_id")
     val measurement_formula = varchar("measurement_formula", length = 255)
 }

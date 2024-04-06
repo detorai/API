@@ -16,6 +16,7 @@ fun Application.configureRouting() {
         measurementTypeRouting(measurementTypeService)
         measurementRouting(measurementService)
         meteostationRouting(meteostationService)
+        meteostationSensRouting(meteostationsSensService)
     }
 
 }

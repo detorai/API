@@ -11,8 +11,8 @@ data class Sensor(
 )
 
 object Sensors : Table(){
-    val sensor_id = integer("sensor_model").autoIncrement()
-    val sensor_name = varchar("sensor_type", length = 32)
+    val sensor_id = integer("sensor_id").autoIncrement()
+    val sensor_name = varchar("sensor_name", length = 32)
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(sensor_id)
 }
